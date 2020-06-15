@@ -103,20 +103,28 @@ function fvr_get_admin_js()
         });
 
         jQuery('#fvr-add-fake').click(function () {
+            fvr_add_single_controller('Test')
+        });
+
+        /*        document.getElementById('fvr-add-fake').addEventListener('click', function () {
+                    fvr_add_single_controller('Test')
+                });*/
+
+        function fvr_add_single_controller(ctrl_value) {
+            //let ctrl_value='Ctrlr';
             // We add an element to the repeater by simulating a click on the add button
-            jQuery('.elementor-repeater-add', jQuery_scope_control_repeater).click();
+            jQuery('.elementor-button.elementor-button-default.elementor-repeater-add').click();
 
             // We grab the latest item of the Repeater field (the one we just triggered the creation of
             var jQuery_scope_repeater_row = jQuery('.elementor-control-fvr_list .elementor-repeater-fields:last-child');
 
             // We set the value of the input field
-            jQuery('.elementor-control.elementor-control-fvr_controller_name.elementor-control-type-text input[data-setting="fvr_controller_name"]', jQuery_scope_repeater_row).val('MY_FIELD_VALUE');
+            jQuery('.elementor-control.elementor-control-fvr_controller_name.elementor-control-type-text input[data-setting="fvr_controller_name"]', jQuery_scope_repeater_row).val(ctrl_value);
 
             // We trigger the input event to ask Elementor to update the widget preview
             jQuery('.elementor-control.elementor-control-fvr_controller_name.elementor-control-type-text input[data-setting="fvr_controller_name"]', jQuery_scope_repeater_row).trigger('input');
 
-        });
-
+        }
 
     </script>
     <?php
