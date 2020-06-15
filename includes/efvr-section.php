@@ -27,6 +27,13 @@ add_action('elementor/element/after_section_end', function ($element, $section_i
         );
 
         $element->add_control(
+            'fvr_relation_id',
+            [
+                'type' => \Elementor\Controls_Manager::HIDDEN,
+            ]
+        );
+
+        $element->add_control(
             'fvr_relation_name',
             [
                 'label' => __('Set, edit or delete relation name', 'efvr'),
@@ -93,22 +100,17 @@ function fvr_get_admin_js()
     ?>
     <button id="fvr-clear-all">Clear All</button>
     <button id="fvr-add-fake">Add Fake</button>
-    <script>
-        //jQuery('.elementor-repeater-row-tool.elementor-repeater-tool-remove').click();
-        jQuery('#fvr-clear-all').click(function () {
-            jQuery('.elementor-repeater-row-tool.elementor-repeater-tool-remove').each(function () {
-                jQuery(this).click();
-                console.log('!!!');
-            });
-        });
+    <script type="text/javascript">
+
+        jQuery('#fvr-clear-all').click(fvr_remove_all_controllers);
 
         jQuery('#fvr-add-fake').click(function () {
             fvr_add_single_controller('Test')
         });
 
-        /*        document.getElementById('fvr-add-fake').addEventListener('click', function () {
-                    fvr_add_single_controller('Test')
-                });*/
+        jQuery('.elementor-control.elementor-control-fvr_relation_name.elementor-control-type-text input[data-setting="fvr_relation_name"]').blur(function () {
+            fvr_update_relation(this.value);
+        });
 
         function fvr_add_single_controller(ctrl_value) {
             //let ctrl_value='Ctrlr';
@@ -126,6 +128,30 @@ function fvr_get_admin_js()
 
         }
 
+        function fvr_remove_all_controllers() {
+            jQuery('.elementor-repeater-row-tool.elementor-repeater-tool-remove').each(function () {
+                jQuery(this).click();
+                console.log('All controllers has been removed');
+            });
+        }
+
+        function fvr_update_relation(rel_name) {
+            console.log(rel_name);
+            jQuery.ajax({
+                type: "post",
+                url: "<?=admin_url('admin-ajax.php')?>",
+                data: {
+                    action: 'fvr_update_relation',
+                    id: '',
+                    title: rel_name,
+                },
+                success: function (response) {
+                    if (response) {
+                        console.log(response);
+                    }
+                }
+            });
+        }
     </script>
     <?php
     return ob_get_clean();

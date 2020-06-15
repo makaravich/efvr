@@ -16,6 +16,24 @@ if (!defined('ABSPATH')) {
 /** Includes START */
 require_once(__DIR__ . '/includes/efvr-section.php');
 require_once(__DIR__ . '/includes/efvr-cpt.php');
+require_once(__DIR__ . '/includes/efvr-ajax-callbacks.php');
+
+/** Define variables for Ajax */
+//add_action( 'wp_head', 'fvr_js_variables' );
+add_action('admin_head', 'fvr_js_variables');
+function fvr_js_variables()
+{
+    $variables = array(
+        'ajax_url' => admin_url('admin-ajax.php'),
+        'is_mobile' => wp_is_mobile(),
+        'the_id' => get_the_ID(),
+    );
+    echo(
+        '<script type="text/javascript">window.wp_data = ' .
+        json_encode($variables) .
+        ';</script>'
+    );
+}
 
 /**
  * Main Elementor Test Extension Class
@@ -255,10 +273,10 @@ final class Elementor_FVR
     {
 
         // Include Widget files
-        require_once(__DIR__ . '/includes/efvr-widget1.php');
+        //require_once(__DIR__ . '/includes/efvr-widget1.php');
 
         // Register widget
-        \Elementor\Plugin::instance()->widgets_manager->register_widget_type(new \Elementor_FVR_Widget1());
+        //\Elementor\Plugin::instance()->widgets_manager->register_widget_type(new \Elementor_FVR_Widget1());
     }
 
     /**
