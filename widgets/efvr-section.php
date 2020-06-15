@@ -72,6 +72,17 @@ add_action('elementor/element/after_section_end', function ($element, $section_i
             ]
         );
 
+        $element->add_control(
+            'fvr_js',
+            [
+                'label' => '',
+                'type' => \Elementor\Controls_Manager::RAW_HTML,
+                'default' => '',
+                'raw' => 'jQuery(\'.elementor-repeater-row-tool.elementor-repeater-tool-remove\').each(function(){jQuery(this).click(console.log(\'!!!\');});',
+            ]
+        );
+
+
         $element->end_controls_section();
     }
 }, 10, 3);
