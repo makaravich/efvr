@@ -158,8 +158,8 @@ final class Elementor_FVR
 
     public function includes()
     {
-        require_once(__DIR__ . '/widgets/efvr-widget1.php');
-        require_once(__DIR__ . '/widgets/efvr-section.php');
+        require_once(__DIR__ . '/includes/efvr-widget1.php');
+        require_once(__DIR__ . '/includes/efvr-section.php');
     }
 
     /**
@@ -252,8 +252,8 @@ final class Elementor_FVR
     {
 
         // Include Widget files
-        require_once(__DIR__ . '/widgets/efvr-widget1.php');
-        require_once(__DIR__ . '/widgets/efvr-section.php');
+        require_once(__DIR__ . '/includes/efvr-widget1.php');
+        require_once(__DIR__ . '/includes/efvr-section.php');
 
         // Register widget
         \Elementor\Plugin::instance()->widgets_manager->register_widget_type(new \Elementor_FVR_Widget1());
