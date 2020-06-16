@@ -155,8 +155,8 @@ function fvr_get_admin_js()
         }
 
         function fvr_select_relation_changed() {
-            let post_id = jQuery('.elementor-control.elementor-control-fvr_relation_id.elementor-control-type-text input[data-setting="fvr_relation_id"]');
-            
+            let rel_id = jQuery('.elementor-control.elementor-control-fvr_relation_id.elementor-control-type-text input[data-setting="fvr_relation_id"]');
+            let rel_name = jQuery('.elementor-control.elementor-control-fvr_relation_name.elementor-control-type-text input[data-setting="fvr_relation_name"]');
         }
     </script>
     <?php
