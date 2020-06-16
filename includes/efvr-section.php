@@ -137,12 +137,13 @@ function fvr_get_admin_js()
 
         function fvr_update_relation(rel_name) {
             console.log(rel_name);
+            let post_id = jQuery('.elementor-control.elementor-control-fvr_relation_id.elementor-control-type-text input[data-setting="fvr_relation_id"]').value;
             jQuery.ajax({
                 type: "post",
                 url: "<?=admin_url('admin-ajax.php')?>",
                 data: {
                     action: 'fvr_update_relation',
-                    id: '',
+                    id: post_id,
                     title: rel_name,
                 },
                 success: function (response) {
@@ -151,6 +152,11 @@ function fvr_get_admin_js()
                     }
                 }
             });
+        }
+
+        function fvr_select_relation_changed() {
+            let post_id = jQuery('.elementor-control.elementor-control-fvr_relation_id.elementor-control-type-text input[data-setting="fvr_relation_id"]');
+            
         }
     </script>
     <?php

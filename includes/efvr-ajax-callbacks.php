@@ -14,10 +14,11 @@ function fvr_update_relation_callback()
         $rel_post = array(
             'post_title' => $post_title,
             'post_type' => 'efvr_relation',
+            'status' => 'publish',
 
-/*            'meta_input' => array(
-                '' => '',
-            ),*/
+            /*            'meta_input' => array(
+                            '' => '',
+                        ),*/
         );
 
         // Update data in efvr_relation posts
@@ -28,7 +29,7 @@ function fvr_update_relation_callback()
 
 
     if ($rel_post_result) {
-        echo __('The relation info has been successfully saved');
+        echo __('The relation info has been successfully saved') . "Post_id=$post_id";
     } else {
         echo __('There was an error during saving the relation');
     }
