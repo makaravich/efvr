@@ -99,7 +99,7 @@ function fvr_get_admin_js()
     <button id="fvr-clear-all">Clear All</button>
     <button id="fvr-add-fake">Add Fake</button>
     <script type="text/javascript">
-        var isCtrlNameChanged = false;
+        let isCtrlNameChanged = false;
 
         let fvr_add_edit = document.querySelector('.elementor-control.elementor-control-fvr_add_edit.elementor-control-type-select select[data-setting="fvr_add_edit"]');
         let rel_id = document.querySelector('.elementor-control.elementor-control-fvr_relation_id.elementor-control-type-text input[data-setting="fvr_relation_id"]');
@@ -119,11 +119,11 @@ function fvr_get_admin_js()
 
         rel_name.addEventListener('blur', fvr_try_save_relation);
 
-        master_value.addEventListener('blur', function(){
+        master_value.addEventListener('blur', function () {
             fvr_update_relation(rel_name.value);
         });
 
-        function fvr_try_save_relation(){
+        function fvr_try_save_relation() {
             if (isCtrlNameChanged) {
                 if (rel_id.value != '1') {
                     fvr_add_edit.options[fvr_add_edit.selectedIndex].text = this.value;
@@ -203,7 +203,7 @@ function fvr_get_admin_js()
             rel_id.value = fvr_add_edit.value;
             if (fvr_add_edit.value == '1') {
                 rel_name.value = '';
-                master_value = '';
+
             } else {
                 rel_name.value = fvr_add_edit.options[fvr_add_edit.selectedIndex].text;
                 fvr_get_relation_values(rel_id.value);
@@ -225,7 +225,7 @@ function fvr_get_admin_js()
                 url: "<?=admin_url('admin-ajax.php')?>",
                 data: {
                     action: 'fvr_get_relation_meta',
-                    id: post_id,
+                    id: id,
                 },
                 success: function (response) {
                     if (response) {
@@ -235,11 +235,9 @@ function fvr_get_admin_js()
 
                     }
                 }
-            }
-            //return res;
+            });
         }
 
-        }
     </script>
     <?php
     return ob_get_clean();
