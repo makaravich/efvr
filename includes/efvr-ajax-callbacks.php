@@ -13,8 +13,9 @@ function fvr_update_relation_callback()
         // Create an array of data for new relation
         $rel_post = array(
             'post_title' => $post_title,
+            'ID' => $post_id,
             'post_type' => 'efvr_relation',
-            'status' => 'publish',
+            'post_status' => 'publish',
 
             /*            'meta_input' => array(
                             '' => '',
@@ -22,7 +23,7 @@ function fvr_update_relation_callback()
         );
 
         // Update data in efvr_relation posts
-        $rel_post_result = wp_insert_post($rel_post);
+        $rel_post_result = wp_update_post($rel_post);
 
     }
     //else {    $prod_res = true; }

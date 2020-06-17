@@ -18,10 +18,7 @@ add_action('elementor/element/after_section_end', function ($element, $section_i
                 'label' => __('Edit existing or add new relation', 'efvr'),
                 'type' => \Elementor\Controls_Manager::SELECT,
                 'default' => 'new',
-                'options' => [
-                    'new' => __('Add New', 'efvr'),
-                    '1' => __('Something', 'efvr'),
-                ],
+                'options' => fvr_get_dropdown_options(),
                 'label_block' => true,
             ]
         );
@@ -102,13 +99,19 @@ function fvr_get_admin_js()
     <button id="fvr-add-fake">Add Fake</button>
     <script type="text/javascript">
 
+        let fvr_add_edit = document.querySelector('.elementor-control.elementor-control-fvr_add_edit.elementor-control-type-select select[data-setting="fvr_add_edit"]');
+        let rel_id = document.querySelector('.elementor-control.elementor-control-fvr_relation_id.elementor-control-type-hidden input[data-setting="fvr_relation_id"]');
+        let rel_name = document.querySelector('.elementor-control.elementor-control-fvr_relation_name.elementor-control-type-text input[data-setting="fvr_relation_name"]');
+
+        fvr_add_edit.addEventListener('change', fvr_select_relation_changed);
+
         jQuery('#fvr-clear-all').click(fvr_remove_all_controllers);
 
         jQuery('#fvr-add-fake').click(function () {
             fvr_add_single_controller('Test')
         });
 
-        jQuery('.elementor-control.elementor-control-fvr_relation_name.elementor-control-type-text input[data-setting="fvr_relation_name"]').blur(function () {
+        rel_name.addEventListener('blur', function () {
             fvr_update_relation(this.value);
         });
 
@@ -135,16 +138,16 @@ function fvr_get_admin_js()
             });
         }
 
-        function fvr_update_relation(rel_name) {
-            console.log(rel_name);
-            let post_id = jQuery('.elementor-control.elementor-control-fvr_relation_id.elementor-control-type-text input[data-setting="fvr_relation_id"]').value;
+        function fvr_update_relation(relation_name) {
+            console.log(relation_name);
+            //let post_id = rel_id.value;
             jQuery.ajax({
                 type: "post",
                 url: "<?=admin_url('admin-ajax.php')?>",
                 data: {
                     action: 'fvr_update_relation',
-                    id: post_id,
-                    title: rel_name,
+                    id: rel_id.value,
+                    title: relation_name,
                 },
                 success: function (response) {
                     if (response) {
@@ -155,11 +158,36 @@ function fvr_get_admin_js()
         }
 
         function fvr_select_relation_changed() {
-            let rel_id = jQuery('.elementor-control.elementor-control-fvr_relation_id.elementor-control-type-text input[data-setting="fvr_relation_id"]');
-            let rel_name = jQuery('.elementor-control.elementor-control-fvr_relation_name.elementor-control-type-text input[data-setting="fvr_relation_name"]');
+            rel_id.value = fvr_add_edit.value;
+            rel_name.value = fvr_add_edit.options[fvr_add_edit.selectedIndex].text;
+
+            console.log(rel_id.value);
+            console.log(fvr_add_edit.options[fvr_add_edit.selectedIndex].text);
         }
     </script>
     <?php
     return ob_get_clean();
 
+}
+
+function fvr_get_relations()
+{
+    $query = array(
+        'post_type' => 'efvr_relation',
+        'posts_per_page' => -1,
+        'order_by' => 'title',
+        'order' => 'ASC',
+    );
+
+    return get_posts($query);
+}
+
+function fvr_get_dropdown_options()
+{
+    $relations = fvr_get_relations();
+    $options = array('1' => __('Add New', 'efvr'));
+    foreach ($relations as $relation) {
+        $options[$relation->ID] = $relation->post_title;
+    }
+    return $options;
 }
