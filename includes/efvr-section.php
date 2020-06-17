@@ -98,6 +98,7 @@ function fvr_get_admin_js()
     <button id="fvr-clear-all">Clear All</button>
     <button id="fvr-add-fake">Add Fake</button>
     <script type="text/javascript">
+        var isCtrlNameChanged = false;
 
         let fvr_add_edit = document.querySelector('.elementor-control.elementor-control-fvr_add_edit.elementor-control-type-select select[data-setting="fvr_add_edit"]');
         let rel_id = document.querySelector('.elementor-control.elementor-control-fvr_relation_id.elementor-control-type-hidden input[data-setting="fvr_relation_id"]');
@@ -105,14 +106,22 @@ function fvr_get_admin_js()
 
         fvr_add_edit.addEventListener('change', fvr_select_relation_changed);
 
+
         jQuery('#fvr-clear-all').click(fvr_remove_all_controllers);
 
         jQuery('#fvr-add-fake').click(function () {
             fvr_add_single_controller('Test')
         });
 
+        rel_name.addEventListener('change', fvr_set_ctrl_name_changed)
+
         rel_name.addEventListener('blur', function () {
-            fvr_update_relation(this.value);
+            if (isCtrlNameChanged) {
+                console.log('Name Blur');
+                fvr_add_edit.options[fvr_add_edit.selectedIndex].text = this.value;
+                fvr_update_relation(this.value);
+                isCtrlNameChanged = false;
+            }
         });
 
         function fvr_add_single_controller(ctrl_value) {
@@ -139,14 +148,16 @@ function fvr_get_admin_js()
         }
 
         function fvr_update_relation(relation_name) {
-            console.log(relation_name);
-            //let post_id = rel_id.value;
+            let post_id = rel_id.value;
+            console.log(relation_name + ' post_id=' + post_id);
+            if (!relation_name) return;
+
             jQuery.ajax({
                 type: "post",
                 url: "<?=admin_url('admin-ajax.php')?>",
                 data: {
                     action: 'fvr_update_relation',
-                    id: rel_id.value,
+                    id: post_id,
                     title: relation_name,
                 },
                 success: function (response) {
@@ -163,6 +174,10 @@ function fvr_get_admin_js()
 
             console.log(rel_id.value);
             console.log(fvr_add_edit.options[fvr_add_edit.selectedIndex].text);
+        }
+
+        function fvr_set_ctrl_name_changed() {
+            isCtrlNameChanged = true;
         }
     </script>
     <?php
